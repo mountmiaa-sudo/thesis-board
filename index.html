@@ -8,16 +8,16 @@
 <title>毕业论文进度</title>
 <style>
 :root{
-  /* 纸本冬景：暖粉天光、灰紫远山、灰蓝雪原、赭棕小熊 */
-  --bg:#F5F2ED; --card:#FDFBF7; --fg:#3B3742; --muted:#5F5868; --faint:#6E6878;
-  --line:#E6E0D8; --sunk:#EAE3D9; --field:#FEFCF9;
-  --accent:#7E9AB5; --accent-s:#5C7A96; --on-accent:#FDFBF7;
-  --todo:#A8A2B0; --active:#7E9AB5; --done:#9A6636;
-  --warm:#A87542; --rail:#D3BEA4;
-  --sky1:#F8D9CD; --sky2:#F4E7E0; --hill:#ADA5B6; --house:#C3A29F;
-  --snowg:#EFEBEC; --tree:#BE9A78; --track:#B9B2BC;
-  --fig-b:#C08A5E; --fig-e:#A8A6A6; --flake:#FFFFFF;
-  --over:#9E4A3C; --soon:#8A6330;
+  /* 雪地：暖白纸、冷调雪带、赭棕小熊、灰白小象 */
+  --bg:#F4F2EE; --card:#FBFAF7; --fg:#3E3B42; --muted:#5E5A64; --faint:#6C6874;
+  --line:#E4E1DB; --sunk:#E9E6DF; --field:#FDFCFA;
+  --accent:#7A8B99; --accent-s:#586B7A; --on-accent:#FBFAF7;
+  --todo:#AFB4B8; --active:#7A8B99; --done:#95693F;
+  --warm:#A2723F; --rail:#C3AE93;
+  --band:#E1E7ED; --band2:#D3DBE3; --fieldsnow:#F3F2EE;
+  --track:#C2CAD2; --sled:#B08E68;
+  --fig-b:#C89670; --fig-e:#B2B6B6; --flake:#FFFFFF;
+  --over:#9C4C3E; --soon:#87652F;
   --shadow:0 1px 2px rgba(90,78,72,.05), 0 3px 14px rgba(90,78,72,.06);
   --ring:rgba(126,154,181,.22); --edit:rgba(126,154,181,.10);
   --serif:Georgia,"Songti SC","Noto Serif CJK SC","Source Han Serif SC","SimSun",serif;
@@ -27,15 +27,15 @@
 }
 @media (prefers-color-scheme:dark){
   :root{
-    --bg:#17151B; --card:#201E26; --fg:#E5DFE4; --muted:#A29CA8; --faint:#8D8794;
-    --line:#2E2B35; --sunk:#28252F; --field:#1D1B23;
-    --accent:#8FA8C2; --accent-s:#8FA8C2; --on-accent:#17151B;
-    --todo:#5F5A6A; --active:#8FA8C2; --done:#C79466;
-    --warm:#C79466; --rail:#4C4034;
-    --sky1:#33262F; --sky2:#241F28; --hill:#3B3543; --house:#4C3D46;
-    --snowg:#282430; --tree:#6E5A4A; --track:#3A3542;
-    --fig-b:#A6764D; --fig-e:#6F6C74; --flake:#C9C4D2;
-    --over:#E0907F; --soon:#D2A468;
+    --bg:#16171A; --card:#1E2024; --fg:#E4E2E4; --muted:#A0A0A6; --faint:#8B8B92;
+    --line:#2C2E33; --sunk:#26282D; --field:#1B1D21;
+    --accent:#8FA2B2; --accent-s:#8FA2B2; --on-accent:#16171A;
+    --todo:#5C6167; --active:#8FA2B2; --done:#C1905F;
+    --warm:#C1905F; --rail:#4A4036;
+    --band:#252A30; --band2:#2D343B; --fieldsnow:#1C1E22;
+    --track:#394047; --sled:#7A6248;
+    --fig-b:#A57A56; --fig-e:#71767A; --flake:#CDD4DB;
+    --over:#DE8A78; --soon:#CFA05F;
     --shadow:none;
     --ring:rgba(143,168,194,.24); --edit:rgba(143,168,194,.12);
   }
@@ -56,20 +56,21 @@ body.hasbar{padding-bottom:78px}
 /* ── 顶部雪景 ───────────────────────── */
 .scene{position:relative;height:112px;overflow:hidden;isolation:isolate}
 .scene-svg{display:block;width:100%;height:112px}
-.scene-fade{position:absolute;left:0;right:0;bottom:0;height:38px;pointer-events:none;
+.scene-fade{position:absolute;left:0;right:0;bottom:0;height:16px;pointer-events:none;
   background:linear-gradient(180deg,transparent,var(--bg))}
 .figs{cursor:pointer}
 @keyframes hop{0%,100%{transform:translateY(0)}30%{transform:translateY(-8px)}
   58%{transform:translateY(0)}78%{transform:translateY(-3px)}}
 .figs.hop .fig-e{animation:hop 1.1s var(--ease)}
 .figs.hop .fig-b{animation:hop 1.1s var(--ease) .14s}
-.snow{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-.snow i{position:absolute;top:-10px;width:3px;height:5px;border-radius:50%;
+.snow{position:absolute;left:0;right:0;top:0;height:74px;pointer-events:none;overflow:hidden}
+.snow i{position:absolute;top:-12px;width:4px;height:7.5px;border-radius:50%;
   background:var(--flake);opacity:0;animation:fall linear infinite}
 @keyframes fall{
-  0%{transform:translate3d(0,-10px,0) rotate(10deg);opacity:0}
-  14%{opacity:.95}
-  100%{transform:translate3d(var(--dx,10px),126px,0) rotate(55deg);opacity:.1}}
+  0%{transform:translate3d(0,-12px,0) rotate(16deg);opacity:0}
+  16%{opacity:1}
+  84%{opacity:.9}
+  100%{transform:translate3d(var(--dx,10px),88px,0) rotate(28deg);opacity:0}}
 
 /* ── 顶栏 ───────────────────────────── */
 .top{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
@@ -143,13 +144,14 @@ ul.items li:first-child{border-top:0;padding-top:0}
 .mark.is-over{border-color:var(--over)}
 .mark.is-soon{border-color:var(--soon)}
 .mark.paw-on{border:0;background:none;border-radius:0;width:18px;height:18px;color:var(--done)}
-.paw{display:block;width:100%;height:100%;fill:currentColor}
+.paw,.bar-paw,.tl-sled{fill:currentColor}
+.paw{display:block;width:100%;height:100%}
 @keyframes stamp{
   0%{transform:scale(.3) rotate(-26deg);opacity:0}
   45%{transform:scale(1.13) rotate(5deg);opacity:1}
   72%{transform:scale(.97) rotate(-1.5deg)}
   100%{transform:scale(1) rotate(0);opacity:1}}
-.mark.just .paw{animation:stamp .82s var(--ease) both}
+.anim .mark.just .paw{animation:stamp .82s var(--ease) backwards}
 .tbody{min-width:0;flex:1;padding-top:1px}
 .ttext{font-size:14.5px;line-height:1.45;border-radius:5px;padding:1px 3px;margin:-1px -3px;cursor:text;
   transition:color .5s var(--ease)}
@@ -203,7 +205,7 @@ details ul.items{margin-top:9px}
 .tl-days{font-family:var(--serif);font-size:14px;font-weight:600;line-height:17px;white-space:nowrap;font-variant-numeric:tabular-nums}
 .tl-days small{font-size:10px;font-weight:400;color:var(--faint);margin-left:1px}
 .tl-node.is-now .tl-name{color:var(--warm)}
-.tl-node.is-now .tl-dot{background:var(--warm);border-color:var(--warm)}
+.tl-sled{position:relative;z-index:2;display:block;width:26px;height:15px;margin:3px 0 2px;color:var(--sled)}
 .tl-node.is-soon .tl-dot{border-color:var(--soon)}
 .tl-node.is-soon .tl-days{color:var(--soon)}
 .tl-node.is-past .tl-name,.tl-node.is-past .tl-days{color:var(--faint);font-weight:500}
@@ -232,18 +234,18 @@ details ul.items{margin-top:9px}
 .step.is-active .bar i{background:var(--active)}
 .step.is-done .bar i{background:var(--done)}
 .bar-paw{position:absolute;top:-6px;width:15px;height:15px;margin-left:-7px;color:var(--todo);
-  transform:rotate(14deg);pointer-events:none;transition:left 1.1s var(--ease)}
+  transform:rotate(14deg);pointer-events:none;display:block;
+  transition:left 1.1s var(--ease),color .5s var(--ease)}
 .step.is-active .bar-paw{color:var(--active)}
 .step.is-done .bar-paw{color:var(--done)}
 .barrange{position:absolute;left:-2px;top:-8px;width:calc(100% + 4px);height:21px;margin:0;padding:0;border:0;
   background:none;-webkit-appearance:none;appearance:none;min-height:0;cursor:pointer}
 .barrange::-webkit-slider-runnable-track{height:21px;background:transparent;border:0}
-.barrange::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;
-  background:var(--accent);border:2.5px solid var(--card);box-shadow:0 1px 4px rgba(0,0,0,.28);margin-top:2px}
+.barrange::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;border-radius:50%;
+  background:transparent;border:0;box-shadow:none;margin-top:-4px}
 .barrange::-moz-range-track{height:21px;background:transparent;border:0}
-.barrange::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--accent);border:2.5px solid var(--card)}
-.step.is-done .barrange::-webkit-slider-thumb{background:var(--done)}
-.step.is-todo .barrange::-webkit-slider-thumb{background:var(--todo)}
+.barrange::-moz-range-thumb{width:30px;height:30px;border-radius:50%;background:transparent;border:0}
+.barrange:focus-visible+.bar-paw,.barrange:focus+.bar-paw{filter:drop-shadow(0 0 3px var(--ring))}
 .note{margin:8px 0 0;font-size:11.5px;line-height:1.55;color:var(--faint);border-radius:5px;padding:1px 3px;
   cursor:text;min-height:18px}
 .note:focus{outline:0;background:var(--edit);box-shadow:0 0 0 1.5px var(--accent);color:var(--fg)}
@@ -276,7 +278,8 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--ring);outline-of
 .savebar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--card);
   border-top:1px solid var(--line);padding:9px 14px calc(9px + env(safe-area-inset-bottom));
   display:flex;flex-wrap:wrap;gap:9px;align-items:center;box-shadow:0 -2px 16px rgba(0,0,0,.07);
-  animation:slideup .5s var(--ease) both}
+}
+.anim .savebar{animation:slideup .5s var(--ease) backwards}
 @keyframes slideup{from{transform:translateY(100%)}to{transform:none}}
 .savebar .msg{flex:1 0 100%;order:-1;min-width:0;font-size:12px;color:var(--faint);line-height:1.4}
 .savebar .msg:empty{display:none}
@@ -290,20 +293,24 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--ring);outline-of
 .btn:disabled{opacity:.5;cursor:default}
 
 /* ── 庆祝动画 ───────────────────────── */
+.anim .party{animation:fadein 1s var(--ease) backwards}
 .party{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;
-  padding:20px;background:rgba(245,242,237,.82);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
-  animation:fadein 1s var(--ease) both}
-@media (prefers-color-scheme:dark){.party{background:rgba(23,21,27,.85)}}
+  padding:20px;background:rgba(244,242,238,.84);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+}
+@media (prefers-color-scheme:dark){.party{background:rgba(22,23,26,.86)}}
 @keyframes fadein{from{opacity:0}to{opacity:1}}
 .party-card{width:100%;max-width:360px;background:var(--card);border:1px solid var(--line);border-radius:20px;
   padding:6px 16px 16px;box-shadow:0 8px 44px rgba(70,60,56,.16);text-align:center;
   background-image:var(--grain);background-size:140px 140px;background-blend-mode:multiply;
-  animation:cardin 1.1s var(--ease) both}
+}
+.anim .party-card{animation:cardin 1.1s var(--ease) backwards}
 @keyframes cardin{from{opacity:0;transform:translateY(22px) scale(.96)}to{opacity:1;transform:none}}
 .party-svg{display:block;width:100%;height:auto}
 .party-txt{margin:2px 0 0;font-family:var(--serif);font-size:17px;font-weight:600;color:var(--fg);
-  animation:fadein 1.2s var(--ease) 1.6s both}
-.party-sub{margin:5px 0 13px;font-size:12px;color:var(--faint);animation:fadein 1.2s var(--ease) 2s both}
+}
+.anim .party-txt{animation:fadein 1.2s var(--ease) 1.6s backwards}
+.party-sub{margin:5px 0 13px;font-size:12px;color:var(--faint)}
+.anim .party-sub{animation:fadein 1.2s var(--ease) 2s backwards}
 
 /* 走近 → 相拥 → 摇摆 */
 @keyframes walk-e{0%{transform:translateX(-46px)}100%{transform:translateX(0)}}
@@ -312,26 +319,28 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--ring);outline-of
 @keyframes sway-b{0%,100%{transform:translate(0,-5px) rotate(2.6deg)}50%{transform:translate(0,0) rotate(-2.2deg)}}
 @keyframes armsin{0%{opacity:0;transform:scale(.82)}60%{opacity:1;transform:scale(1.04)}100%{opacity:1;transform:scale(1)}}
 @keyframes sway-a{0%,100%{transform:translateY(-2px) rotate(.9deg)}50%{transform:translateY(-4px) rotate(-.9deg)}}
-.p-e{animation:walk-e 2s var(--ease) both, sway-e 2.4s ease-in-out 2s infinite}
-.p-b{animation:walk-b 2s var(--ease) both, sway-b 2.4s ease-in-out 2s infinite}
-.p-arms{transform-origin:152px 128px;
-  animation:armsin 1.1s var(--ease) 1.7s both, sway-a 2.4s ease-in-out 2.8s infinite}
+.anim .p-e{animation:walk-e 2s var(--ease) backwards, sway-e 2.4s ease-in-out 2s infinite}
+.anim .p-b{animation:walk-b 2s var(--ease) backwards, sway-b 2.4s ease-in-out 2s infinite}
+.p-arms{transform-origin:152px 128px}
+.anim .p-arms{animation:armsin 1.1s var(--ease) 1.7s backwards, sway-a 2.4s ease-in-out 2.8s infinite}
 @keyframes notefloat{
   0%{transform:translate(0,0) rotate(-8deg) scale(.5);opacity:0}
   18%{opacity:.95;transform:translate(var(--nx1,-6px),-14px) rotate(4deg) scale(1)}
   100%{transform:translate(var(--nx2,-20px),-62px) rotate(-14deg) scale(.85);opacity:0}}
-.p-note{animation:notefloat 3.4s ease-in-out infinite;transform-origin:center}
+.p-note{transform-origin:center;opacity:0}
+.anim .p-note{animation:notefloat 3.4s ease-in-out infinite}
 @keyframes glow{0%,100%{opacity:.10}50%{opacity:.22}}
-.p-glow{animation:glow 3.6s ease-in-out 2s infinite}
+.p-glow{opacity:.16}
+.anim .p-glow{animation:glow 3.6s ease-in-out 2s infinite}
 
 /* ── 入场 ───────────────────────────── */
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-.hero{animation:rise .9s var(--ease) both}
-#main section.card:nth-of-type(1){animation:rise .9s var(--ease) .09s both}
-#main section.card:nth-of-type(2){animation:rise .9s var(--ease) .18s both}
-#main section.card:nth-of-type(3){animation:rise .9s var(--ease) .27s both}
-#main section.card:nth-of-type(4){animation:rise .9s var(--ease) .36s both}
-#main section.card:nth-of-type(5){animation:rise .9s var(--ease) .45s both}
+.anim .hero{animation:rise .9s var(--ease) backwards}
+.anim #main section.card:nth-of-type(1){animation:rise .9s var(--ease) .09s backwards}
+.anim #main section.card:nth-of-type(2){animation:rise .9s var(--ease) .18s backwards}
+.anim #main section.card:nth-of-type(3){animation:rise .9s var(--ease) .27s backwards}
+.anim #main section.card:nth-of-type(4){animation:rise .9s var(--ease) .36s backwards}
+.anim #main section.card:nth-of-type(5){animation:rise .9s var(--ease) .45s backwards}
 
 .err{color:var(--over);font-size:13.5px;line-height:1.6}
 .err .hint{display:block;margin-top:6px;color:var(--faint);font-size:11.5px}
@@ -358,6 +367,11 @@ footer a{color:var(--faint)}
     <ellipse cx="14.6" cy="7.2" rx="2.5" ry="3"/>
     <ellipse cx="17.7" cy="12.1" rx="2.1" ry="2.5"/>
   </symbol>
+  <symbol id="sled" viewBox="0 0 26 15">
+    <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 5h16M5.5 8h13M3 12h17q3.6 0 4.4-3.4M7 5v7M17 5v7"/>
+    </g>
+  </symbol>
   <!-- 铅笔感：噪声位移 + 微弱模糊，让边缘毛糙不锐利 -->
   <filter id="pencil" x="-25%" y="-25%" width="150%" height="150%">
     <feTurbulence type="fractalNoise" baseFrequency="0.62" numOctaves="3" seed="7" result="n"/>
@@ -366,48 +380,58 @@ footer a{color:var(--faint)}
   </filter>
 </defs></svg>
 
-<!-- 顶部雪景 -->
+<!-- 顶部雪景：上方雪带飘雪，两只探出雪线，下方雪地上一串爪印与一架雪橇 -->
 <div class="scene" id="scene">
   <svg class="scene-svg" viewBox="0 0 375 112" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
     <defs>
-      <linearGradient id="skyg" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="var(--sky1)"/><stop offset="1" stop-color="var(--sky2)"/>
-      </linearGradient>
-      <filter id="mist" x="-25%" y="-40%" width="150%" height="190%"><feGaussianBlur stdDeviation="3"/></filter>
-      <filter id="haze" x="-25%" y="-40%" width="150%" height="190%"><feGaussianBlur stdDeviation="1.3"/></filter>
+      <filter id="mist" x="-25%" y="-40%" width="150%" height="190%"><feGaussianBlur stdDeviation="2.4"/></filter>
     </defs>
-    <rect width="375" height="112" fill="url(#skyg)"/>
-    <path d="M0 46 C34 24 78 20 118 34 C158 48 196 30 238 38 C282 46 330 36 375 42 L375 112 L0 112Z"
-          fill="var(--hill)" opacity=".8" filter="url(#mist)"/>
-    <g fill="var(--house)" opacity=".62" filter="url(#haze)">
-      <path d="M150 56h15v7h-15z"/><path d="M147 56l10-6 10 6z"/>
-      <path d="M186 58h19v7h-19z"/><path d="M183 58l12-6 12 6z"/>
-      <path d="M232 59h13v6h-13z"/><path d="M229 59l9-5 9 5z"/>
-    </g>
-    <path d="M0 64 C72 58 140 70 218 63 C288 57 336 66 375 61 L375 112 L0 112Z"
-          fill="var(--snowg)" filter="url(#mist)"/>
-    <g stroke="var(--tree)" stroke-width="1.1" stroke-linecap="round" fill="none" opacity=".72" filter="url(#pencil)">
-      <path d="M44 78V56M44 64l-6-5M44 61l5-4M44 68l-4-3"/>
-      <path d="M76 80V58M76 67l-7-6M76 63l6-5M76 72l-5-4"/>
-      <path d="M306 76V57M306 65l-5-4M306 62l5-4"/>
-    </g>
-    <g fill="var(--track)" opacity=".5">
-      <ellipse cx="126" cy="95" rx="2.6" ry="2"/><ellipse cx="140" cy="90" rx="2.4" ry="1.9"/>
-      <ellipse cx="153" cy="97" rx="2.6" ry="2"/><ellipse cx="167" cy="91" rx="2.4" ry="1.9"/>
-      <ellipse cx="180" cy="98" rx="2.5" ry="2"/><ellipse cx="194" cy="92" rx="2.3" ry="1.8"/>
-    </g>
+
+    <!-- 远处的雪气 -->
+    <rect width="375" height="70" fill="var(--band)"/>
+    <rect y="36" width="375" height="34" fill="var(--band2)" opacity=".6" filter="url(#mist)"/>
+
+    <!-- 两只探出雪线 -->
     <g class="figs" id="figs" filter="url(#pencil)">
-      <rect x="198" y="76" width="58" height="32" fill="transparent"/>
+      <rect x="124" y="30" width="118" height="48" fill="transparent"/>
       <g class="fig fig-e">
-        <ellipse cx="216" cy="95" rx="7.4" ry="6.6" fill="var(--fig-e)"/>
-        <ellipse cx="210" cy="88" rx="3.4" ry="3.2" fill="var(--fig-e)"/>
-        <path d="M223 95q5 0 5 4" stroke="var(--fig-e)" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <ellipse cx="156" cy="62" rx="16" ry="14" fill="var(--fig-e)"/>
+        <ellipse cx="142" cy="52" rx="7.6" ry="7" fill="var(--fig-e)"/>
+        <path d="M170 59q8 1 9 8" stroke="var(--fig-e)" stroke-width="4.4" fill="none" stroke-linecap="round"/>
+        <circle cx="163" cy="58" r="1.4" fill="var(--band2)"/>
       </g>
       <g class="fig fig-b">
-        <ellipse cx="238" cy="96" rx="6.8" ry="6.2" fill="var(--fig-b)"/>
-        <ellipse cx="233" cy="89" rx="2.9" ry="2.9" fill="var(--fig-b)"/>
-        <ellipse cx="243" cy="89" rx="2.9" ry="2.9" fill="var(--fig-b)"/>
+        <ellipse cx="207" cy="64" rx="14" ry="12.5" fill="var(--fig-b)"/>
+        <ellipse cx="197" cy="53" rx="5.8" ry="5.8" fill="var(--fig-b)"/>
+        <ellipse cx="217" cy="53" rx="5.8" ry="5.8" fill="var(--fig-b)"/>
+        <circle cx="202" cy="61" r="1.4" fill="var(--fieldsnow)"/>
+        <path d="M219 62q8-3 10 3" stroke="var(--fig-b)" stroke-width="4" fill="none" stroke-linecap="round"/>
       </g>
+    </g>
+
+    <!-- 近处雪地盖住它们的下半身 -->
+    <path d="M0 72 C60 68 130 74 200 70 C268 66 330 73 375 69 L375 112 L0 112Z"
+          fill="var(--fieldsnow)"/>
+    <path d="M0 72 C60 68 130 74 200 70 C268 66 330 73 375 69"
+          fill="none" stroke="var(--track)" stroke-width="1" opacity=".45" filter="url(#mist)"/>
+
+    <!-- 雪地上的爪印 -->
+    <g fill="var(--track)" opacity=".85" filter="url(#pencil)">
+      <use href="#paw" x="14"  y="92" width="13" height="13"/>
+      <use href="#paw" x="46"  y="82" width="12" height="12"/>
+      <use href="#paw" x="76"  y="95" width="12" height="12"/>
+      <use href="#paw" x="106" y="84" width="11" height="11"/>
+      <use href="#paw" x="136" y="96" width="10" height="10"/>
+      <use href="#paw" x="166" y="86" width="10" height="10"/>
+    </g>
+
+    <!-- 停在一旁的雪橇 -->
+    <g stroke="var(--sled)" stroke-width="1.5" fill="none" stroke-linecap="round"
+       stroke-linejoin="round" opacity=".95" filter="url(#pencil)">
+      <path d="M290 90h46"/>
+      <path d="M294 95h38"/>
+      <path d="M287 102h48q7.5 0 9.5-6.5"/>
+      <path d="M300 90v12M326 90v12"/>
     </g>
   </svg>
   <div class="snow" id="snow" aria-hidden="true"></div>
@@ -917,25 +941,34 @@ footer a{color:var(--faint)}
       if (op) p.setAttribute('opacity', op);
       svg.appendChild(p);
     }
-    var seg = Math.max(8, Math.round((x1 - x0) / 24)), dd = 'M' + x0 + ' ' + RY;
-    for (var i = 1; i <= seg; i++) {
-      var xx = x0 + (x1 - x0) * i / seg;
-      var yy = RY + Math.sin(i * 1.7) * 1.1 + Math.cos(i * 0.9) * 0.6;
-      dd += ' L' + xx.toFixed(1) + ' ' + yy.toFixed(1);
+    // 雪橇滑过留下的两道平行痕，带一点确定性抖动
+    var seg = Math.max(8, Math.round((x1 - x0) / 22));
+    function runner(baseY, phase) {
+      var dd = 'M' + x0 + ' ' + baseY;
+      for (var i = 1; i <= seg; i++) {
+        var xx = x0 + (x1 - x0) * i / seg;
+        var yy = baseY + Math.sin(i * 1.6 + phase) * 0.9 + Math.cos(i * 0.8 + phase) * 0.5;
+        dd += ' L' + xx.toFixed(1) + ' ' + yy.toFixed(1);
+      }
+      return dd;
     }
-    line(dd, 1.7);
+    line(runner(RY - 2.5, 0), 1.3, '.9');
+    line(runner(RY + 2.5, 1.2), 1.3, '.62');
 
     var postXs = [];
-    function node(cls, name, dateNode, daysNode, pos) {
+    function node(cls, name, dateNode, daysNode, pos, markNode) {
       var n = el('div', 'tl-node' + (cls ? ' ' + cls : ''));
       n.style.left = 'calc(36px + (100% - 72px) * ' + (pos / 100) + ')';
       n.appendChild(el('span', 'tl-name', name));
-      n.appendChild(el('span', 'tl-dot'));
+      n.appendChild(markNode || el('span', 'tl-dot'));
       n.appendChild(dateNode);
       if (daysNode) n.appendChild(daysNode);
       box.appendChild(n);
     }
-    node('is-now', '今天', el('span', 'tl-date', mmdd(today())), null, 0);
+    var sled = svgEl('svg');
+    sled.setAttribute('class', 'tl-sled'); sled.setAttribute('viewBox', '0 0 26 15');
+    var su = svgEl('use'); su.setAttribute('href', '#sled'); sled.appendChild(su);
+    node('is-now', '今天', el('span', 'tl-date', mmdd(today())), null, 0, sled);
 
     var t = +today();
     var max = Math.max.apply(null, ms.map(function (x) { return +x.d; }));
@@ -953,12 +986,12 @@ footer a{color:var(--faint)}
     });
 
     postXs.forEach(function (px) {
-      line('M' + px.toFixed(1) + ' 31 L' + (px + 0.8).toFixed(1) + ' 52', 1.7);
+      line('M' + px.toFixed(1) + ' 34 L' + (px + 0.6).toFixed(1) + ' 49', 1.5);
     });
     for (var k = 1; k <= 5; k++) {
       var fx = x0 + (x1 - x0) * k / 6;
       var near = postXs.some(function (px) { return Math.abs(px - fx) < 30; });
-      if (!near) line('M' + fx.toFixed(1) + ' 35 L' + (fx - 0.7).toFixed(1) + ' 49', 1.4, '.62');
+      if (!near) line('M' + fx.toFixed(1) + ' 37.5 L' + (fx - 0.5).toFixed(1) + ' 45', 1.2, '.45');
     }
     box.insertBefore(svg, box.firstChild);
   }
@@ -992,11 +1025,6 @@ footer a{color:var(--faint)}
       var bar = el('div', 'bar'), fill = el('i');
       bar.appendChild(fill); wrap.appendChild(bar);
 
-      var walker = pawIcon('bar-paw');
-      walker.style.left = p + '%';
-      walker.style.display = p > 0 ? '' : 'none';   // SVG 上 hidden 属性无效，必须设 display
-      wrap.appendChild(walker);
-
       var rg = el('input');
       rg.type = 'range'; rg.className = 'barrange';
       rg.min = 0; rg.max = 100; rg.step = 5; rg.value = p;
@@ -1006,11 +1034,15 @@ footer a{color:var(--faint)}
         s.progress = v;
         fill.style.transition = 'none'; fill.style.width = v + '%';
         walker.style.transition = 'none'; walker.style.left = v + '%';
-        walker.style.display = v > 0 ? '' : 'none';
         pctEl.textContent = v + '%';
         touched();
       });
       wrap.appendChild(rg);
+
+      // 爪印就是拖拽手柄：画在 input 之后，但不吃指针事件
+      var walker = pawIcon('bar-paw');
+      walker.style.left = p + '%';
+      wrap.appendChild(walker);
       row.appendChild(wrap);
 
       var note = el('p', 'note', s.note || '');
@@ -1348,6 +1380,16 @@ footer a{color:var(--faint)}
     g.classList.add('hop');
     setTimeout(function () { g.classList.remove('hop'); }, 1400);
   });
+
+  (function enableAnim() {
+    // 内容默认就是可见的，动画只是加成。文档不可见时（后台标签页）动画时间轴会冻结，
+    // 此时不挂 .anim，免得元素被钉在 opacity:0 上。
+    function on() { document.body.classList.add('anim'); }
+    if (!document.hidden) on();
+    else document.addEventListener('visibilitychange', function h() {
+      if (!document.hidden) { on(); document.removeEventListener('visibilitychange', h); }
+    });
+  })();
 
   (function snowfall() {
     if (calm()) return;
