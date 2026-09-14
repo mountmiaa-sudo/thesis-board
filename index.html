@@ -13,7 +13,10 @@
   --line:#E6E0D8; --sunk:#EAE3D9; --field:#FEFCF9;
   --accent:#7E9AB5; --accent-s:#5C7A96; --on-accent:#FDFBF7;
   --todo:#A8A2B0; --active:#7E9AB5; --done:#9A6636;
-  --warm:#A87542; --rail:#DCCBB6;
+  --warm:#A87542; --rail:#D3BEA4;
+  --sky1:#F8D9CD; --sky2:#F4E7E0; --hill:#ADA5B6; --house:#C3A29F;
+  --snowg:#EFEBEC; --tree:#BE9A78; --track:#B9B2BC;
+  --fig-b:#C08A5E; --fig-e:#A8A6A6; --flake:#FFFFFF;
   --over:#9E4A3C; --soon:#8A6330;
   --shadow:0 1px 2px rgba(90,78,72,.05), 0 3px 14px rgba(90,78,72,.06);
   --ring:rgba(126,154,181,.22); --edit:rgba(126,154,181,.10);
@@ -28,7 +31,10 @@
     --line:#2E2B35; --sunk:#28252F; --field:#1D1B23;
     --accent:#8FA8C2; --accent-s:#8FA8C2; --on-accent:#17151B;
     --todo:#5F5A6A; --active:#8FA8C2; --done:#C79466;
-    --warm:#C79466; --rail:#463B31;
+    --warm:#C79466; --rail:#4C4034;
+    --sky1:#33262F; --sky2:#241F28; --hill:#3B3543; --house:#4C3D46;
+    --snowg:#282430; --tree:#6E5A4A; --track:#3A3542;
+    --fig-b:#A6764D; --fig-e:#6F6C74; --flake:#C9C4D2;
     --over:#E0907F; --soon:#D2A468;
     --shadow:none;
     --ring:rgba(143,168,194,.24); --edit:rgba(143,168,194,.12);
@@ -41,10 +47,9 @@ html{-webkit-text-size-adjust:100%}
 body{
   margin:0;color:var(--fg);
   background-color:var(--bg);
-  background-image:var(--grain),var(--sky);
-  background-size:140px 140px,100% 320px;
-  background-repeat:repeat,no-repeat;
-  background-blend-mode:multiply,normal;
+  background-image:var(--grain);
+  background-size:140px 140px;
+  background-blend-mode:multiply;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
   font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-wrap:break-word;
 }
@@ -55,7 +60,7 @@ body{
   background-blend-mode:multiply;
 }
 body.dirty{padding-bottom:78px}
-.wrap{max-width:640px;margin:0 auto;padding:16px 14px 32px}
+.wrap{max-width:640px;margin:0 auto;padding:6px 14px 32px}
 
 /* ── 顶栏 ───────────────────────────── */
 .top{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
@@ -108,6 +113,7 @@ ul.todos li:first-child{border-top:0;padding-top:0}
 .mark.is-over{border-color:var(--over)}
 .mark.is-soon{border-color:var(--soon)}
 .mark.is-done{border-color:var(--done);background:var(--done)}
+.mark.paw-on{border:0;background:none;border-radius:0;width:17px;height:17px;color:var(--done)}
 .tbody{min-width:0;flex:1;padding-top:1px}
 .ttext{font-size:14.5px;line-height:1.45;border-radius:5px;padding:1px 3px;margin:-1px -3px}
 .unlocked .ttext{cursor:text}
@@ -145,7 +151,7 @@ details ul.todos{margin-top:9px}
 
 /* ── 里程碑时间轴 ───────────────────── */
 .tl{position:relative;height:94px;margin:2px 0 0}
-.tl-rail{position:absolute;left:36px;right:36px;top:41px;height:2px;background:var(--rail);border-radius:2px}
+.tl-dot{position:relative;z-index:2}
 .tl-node{position:absolute;top:16px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;width:max-content}
 .tl-name{font-size:12px;font-weight:550;line-height:16px;white-space:nowrap}
 .tl-dot{width:11px;height:11px;border-radius:50%;background:var(--card);border:2.5px solid var(--todo);margin:5px 0 4px;box-sizing:border-box}
@@ -261,10 +267,129 @@ ol.log li:first-child::before{background:var(--warm)}
 footer{margin-top:16px;text-align:center;font-size:11.5px;color:var(--faint)}
 footer a{color:var(--faint)}
 footer .sep{margin:0 5px}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+/* ── 顶部雪景 ───────────────────────── */
+.scene{position:relative;height:112px;overflow:hidden;isolation:isolate}
+.scene-svg{display:block;width:100%;height:112px}
+.scene-fade{position:absolute;left:0;right:0;bottom:0;height:38px;pointer-events:none;
+  background:linear-gradient(180deg,transparent,var(--bg))}
+.figs{cursor:pointer;pointer-events:auto}
+@keyframes hop{0%,100%{transform:translateY(0)}28%{transform:translateY(-8px)}
+  52%{transform:translateY(0)}72%{transform:translateY(-3px)}}
+.figs.hop .fig-e{animation:hop .72s cubic-bezier(.33,.9,.4,1)}
+.figs.hop .fig-b{animation:hop .72s cubic-bezier(.33,.9,.4,1) .1s}
+
+/* 飘雪 */
+.snow{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.snow i{position:absolute;top:-10px;width:3px;height:5px;border-radius:50%;
+  background:var(--flake);opacity:0;transform:rotate(18deg);
+  animation:fall linear infinite}
+@keyframes fall{
+  0%{transform:translate3d(0,-10px,0) rotate(10deg);opacity:0}
+  12%{opacity:.95}
+  100%{transform:translate3d(var(--dx,10px),126px,0) rotate(55deg);opacity:.1}}
+
+/* ── 爪印 ───────────────────────────── */
+.paw{display:block;fill:currentColor}
+.mark .paw{width:17px;height:17px;margin:-1px}
+@keyframes stamp{
+  0%{transform:scale(.25) rotate(-28deg);opacity:0}
+  58%{transform:scale(1.18) rotate(5deg);opacity:1}
+  100%{transform:scale(1) rotate(0);opacity:1}}
+.mark.just .paw{animation:stamp .42s cubic-bezier(.34,1.56,.64,1) both}
+/* 进度条头部的爪印：像踩在雪上往前走 */
+.bar-paw{position:absolute;top:-6px;width:15px;height:15px;margin-left:-7px;
+  color:var(--todo);transform:rotate(14deg);pointer-events:none;
+  transition:left .6s cubic-bezier(.4,0,.2,1)}
+.step.is-active .bar-paw{color:var(--active)}
+.step.is-done .bar-paw{color:var(--done)}
+
+/* ── 栅栏时间轴 ─────────────────────── */
+.tl-svg{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
+
+/* ── 入场 ───────────────────────────── */
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.hero{animation:rise .5s cubic-bezier(.2,.7,.3,1) both}
+#main section.card:nth-of-type(1){animation:rise .5s cubic-bezier(.2,.7,.3,1) .06s both}
+#main section.card:nth-of-type(2){animation:rise .5s cubic-bezier(.2,.7,.3,1) .12s both}
+#main section.card:nth-of-type(3){animation:rise .5s cubic-bezier(.2,.7,.3,1) .18s both}
+#main section.card:nth-of-type(4){animation:rise .5s cubic-bezier(.2,.7,.3,1) .24s both}
+
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important}
+  .snow{display:none}
+  .hero,#main section.card,.mark.just .paw,.figs.hop .fig-e,.figs.hop .fig-b{animation:none!important}
+}
 </style>
 </head>
 <body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="paw" viewBox="0 0 20 20">
+    <ellipse cx="10.2" cy="13.4" rx="5.3" ry="4.5"/>
+    <ellipse cx="4.3" cy="8.1" rx="2.5" ry="3"/>
+    <ellipse cx="9.3" cy="5.4" rx="2.6" ry="3.1"/>
+    <ellipse cx="14.6" cy="7.2" rx="2.5" ry="3"/>
+    <ellipse cx="17.7" cy="12.1" rx="2.1" ry="2.5"/>
+  </symbol>
+</defs></svg>
+
+<!-- 顶部雪景：远山、村舍、枯树、脚印与两只同行的小动物 -->
+<div class="scene" id="scene">
+  <svg class="scene-svg" viewBox="0 0 375 112" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="skyg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="var(--sky1)"/>
+        <stop offset="1" stop-color="var(--sky2)"/>
+      </linearGradient>
+      <filter id="mist" x="-25%" y="-40%" width="150%" height="190%"><feGaussianBlur stdDeviation="3"/></filter>
+      <filter id="haze" x="-25%" y="-40%" width="150%" height="190%"><feGaussianBlur stdDeviation="1.3"/></filter>
+      <filter id="soft" x="-25%" y="-40%" width="150%" height="190%"><feGaussianBlur stdDeviation=".5"/></filter>
+    </defs>
+
+    <rect width="375" height="112" fill="url(#skyg)"/>
+
+    <path d="M0 46 C34 24 78 20 118 34 C158 48 196 30 238 38 C282 46 330 36 375 42 L375 112 L0 112Z"
+          fill="var(--hill)" opacity=".8" filter="url(#mist)"/>
+
+    <g fill="var(--house)" opacity=".62" filter="url(#haze)">
+      <path d="M150 56h15v7h-15z"/><path d="M147 56l10-6 10 6z"/>
+      <path d="M186 58h19v7h-19z"/><path d="M183 58l12-6 12 6z"/>
+      <path d="M232 59h13v6h-13z"/><path d="M229 59l9-5 9 5z"/>
+    </g>
+
+    <path d="M0 64 C72 58 140 70 218 63 C288 57 336 66 375 61 L375 112 L0 112Z"
+          fill="var(--snowg)" filter="url(#mist)"/>
+
+    <g stroke="var(--tree)" stroke-width="1.1" stroke-linecap="round" fill="none" opacity=".72" filter="url(#soft)">
+      <path d="M44 78V56M44 64l-6-5M44 61l5-4M44 68l-4-3"/>
+      <path d="M76 80V58M76 67l-7-6M76 63l6-5M76 72l-5-4"/>
+      <path d="M306 76V57M306 65l-5-4M306 62l5-4"/>
+    </g>
+
+    <g class="tracks" fill="var(--track)" opacity=".5">
+      <ellipse cx="126" cy="95" rx="2.6" ry="2"/><ellipse cx="140" cy="90" rx="2.4" ry="1.9"/>
+      <ellipse cx="153" cy="97" rx="2.6" ry="2"/><ellipse cx="167" cy="91" rx="2.4" ry="1.9"/>
+      <ellipse cx="180" cy="98" rx="2.5" ry="2"/><ellipse cx="194" cy="92" rx="2.3" ry="1.8"/>
+    </g>
+
+    <g class="figs" id="figs">
+      <rect x="198" y="76" width="58" height="32" fill="transparent"/>
+      <g class="fig fig-e">
+        <ellipse cx="216" cy="95" rx="7.4" ry="6.6" fill="var(--fig-e)"/>
+        <ellipse cx="210" cy="88" rx="3.4" ry="3.2" fill="var(--fig-e)"/>
+        <path d="M223 95q5 0 5 4" stroke="var(--fig-e)" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      </g>
+      <g class="fig fig-b">
+        <ellipse cx="238" cy="96" rx="6.8" ry="6.2" fill="var(--fig-b)"/>
+        <ellipse cx="233" cy="89" rx="2.9" ry="2.9" fill="var(--fig-b)"/>
+        <ellipse cx="243" cy="89" rx="2.9" ry="2.9" fill="var(--fig-b)"/>
+      </g>
+    </g>
+  </svg>
+  <div class="snow" id="snow" aria-hidden="true"></div>
+  <div class="scene-fade" aria-hidden="true"></div>
+</div>
+
 <div class="wrap" id="wrap">
 
   <div class="top">
@@ -376,6 +501,16 @@ footer .sep{margin:0 5px}
   }
   function clear(n) { while (n.firstChild) n.removeChild(n.firstChild); return n; }
   function clone(o) { return JSON.parse(JSON.stringify(o)); }
+  var NS = 'http://www.w3.org/2000/svg';
+  function pawIcon(cls) {
+    var svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('class', cls); svg.setAttribute('viewBox', '0 0 20 20');
+    var u = document.createElementNS(NS, 'use'); u.setAttribute('href', '#paw');
+    svg.appendChild(u); return svg;
+  }
+  function calm() {
+    return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
 
   /* ── 日期 ── */
   function parseDate(s) {
@@ -489,13 +624,32 @@ footer .sep{margin:0 5px}
     $('stale').hidden = S.unlocked || !(u && dFrom(u) < -7);
   }
 
+  var ringState = { cur: -1, raf: 0, to: 0 };
+  function setRing(pct) {
+    $('ringFg').setAttribute('stroke-dasharray', (RING_C * pct / 100).toFixed(2) + ' ' + RING_C.toFixed(2));
+    if (pct === ringState.cur) return;
+    var from = ringState.cur < 0 ? 0 : ringState.cur;
+    ringState.cur = pct;
+    cancelAnimationFrame(ringState.raf);
+    clearTimeout(ringState.to);
+    if (calm() || document.hidden) { $('ringTxt').textContent = pct + '%'; return; }
+    // 后台标签页里 rAF 会被暂停，兜底把最终值写上，避免数字停在旧值
+    ringState.to = setTimeout(function () { $('ringTxt').textContent = pct + '%'; }, 900);
+    var t0 = 0;
+    ringState.raf = requestAnimationFrame(function step(t) {
+      if (!t0) t0 = t;
+      var k = Math.min(1, (t - t0) / 620), e = 1 - Math.pow(1 - k, 3);
+      $('ringTxt').textContent = Math.round(from + (pct - from) * e) + '%';
+      if (k < 1) ringState.raf = requestAnimationFrame(step);
+    });
+  }
+
   function renderHero(d) {
     var stages = d.stages || [];
     var pct = stages.length
       ? Math.round(stages.reduce(function (a, s) { return a + Math.max(0, Math.min(100, +s.progress || 0)); }, 0) / stages.length)
       : 0;
-    $('ringTxt').textContent = pct + '%';
-    $('ringFg').setAttribute('stroke-dasharray', (RING_C * pct / 100).toFixed(2) + ' ' + RING_C.toFixed(2));
+    setRing(pct);
 
     var open = (d.todos || []).filter(function (t) { return !t.done; });
     var over = open.filter(function (t) { var x = parseDate(t.due); return x && dFrom(x) < 0; }).length;
@@ -525,9 +679,20 @@ footer .sep{margin:0 5px}
     var btn = el('button', 'markbtn');
     btn.type = 'button';
     btn.setAttribute('aria-label', t.done ? '标记为未完成' : '标记为已完成');
-    btn.appendChild(el('span', 'mark ' + cls));
+    if (t.done) {
+      var m = el('span', 'mark paw-on' + (S.justTicked === t.id ? ' just' : ''));
+      m.appendChild(pawIcon('paw'));
+      btn.appendChild(m);
+    } else {
+      btn.appendChild(el('span', 'mark ' + cls));
+    }
     if (S.unlocked) {
-      btn.addEventListener('click', function () { t.done = !t.done; touched(); renderTodos(S.data); });
+      btn.addEventListener('click', function () {
+        t.done = !t.done;
+        S.justTicked = t.done ? t.id : null;   // 只让刚勾的那枚爪印做盖章动画
+        touched(); renderTodos(S.data);
+        S.justTicked = null;
+      });
     } else { btn.disabled = true; }
     li.appendChild(btn);
 
@@ -617,7 +782,31 @@ footer .sep{margin:0 5px}
       .filter(function (x) { return x.d; });
     if (!ms.length) { box.style.height = 'auto'; box.appendChild(el('p', 'empty', '未设置里程碑。')); return; }
     box.style.height = '';
-    box.appendChild(el('div', 'tl-rail'));
+
+    var W = Math.max(200, box.clientWidth || 320), PAD = 36, RY = 41;
+    var x0 = PAD, x1 = W - PAD;
+    var svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('class', 'tl-svg');
+    svg.setAttribute('viewBox', '0 0 ' + W + ' 94');
+    function line(dAttr, w, op) {
+      var pth = document.createElementNS(NS, 'path');
+      pth.setAttribute('d', dAttr); pth.setAttribute('fill', 'none');
+      pth.setAttribute('stroke', 'var(--rail)');
+      pth.setAttribute('stroke-width', w); pth.setAttribute('stroke-linecap', 'round');
+      if (op) pth.setAttribute('opacity', op);
+      svg.appendChild(pth);
+    }
+    // 横杆：给一点确定性的抖动，像手画的
+    var seg = Math.max(8, Math.round((x1 - x0) / 24)), d = 'M' + x0 + ' ' + RY;
+    for (var i = 1; i <= seg; i++) {
+      var xx = x0 + (x1 - x0) * i / seg;
+      var yy = RY + Math.sin(i * 1.7) * 1.1 + Math.cos(i * 0.9) * 0.6;
+      d += ' L' + xx.toFixed(1) + ' ' + yy.toFixed(1);
+    }
+    line(d, 1.7);
+    // 立柱：里程碑处一根，空档里补几根矮的
+    var postXs = [];
+
 
     var t = +today();
     var max = Math.max.apply(null, ms.map(function (x) { return +x.d; }));
@@ -651,7 +840,18 @@ footer .sep{margin:0 5px}
                  function () { renderTimeline(S.data); });
       }
       node(cls, x.m.name || '', dnode, dn, pos);
+      postXs.push(x0 + (x1 - x0) * pos / 100);
     });
+
+    postXs.forEach(function (px) {
+      line('M' + px.toFixed(1) + ' 31 L' + (px + 0.8).toFixed(1) + ' 52', 1.7);
+    });
+    for (var k = 1; k <= 5; k++) {
+      var fx = x0 + (x1 - x0) * k / 6;
+      var near = postXs.some(function (px) { return Math.abs(px - fx) < 30; });
+      if (!near) line('M' + fx.toFixed(1) + ' 35 L' + (fx - 0.7).toFixed(1) + ' 49', 1.4, '.62');
+    }
+    box.insertBefore(svg, box.firstChild);
   }
 
   function renderSteps(d) {
@@ -684,6 +884,12 @@ footer .sep{margin:0 5px}
       var wrap = el('div', 'barwrap');
       var bar = el('div', 'bar'), fill = el('i');
       bar.appendChild(fill); wrap.appendChild(bar);
+      // 走到哪儿就在雪地上留一枚爪印
+      var walker = pawIcon('bar-paw');
+      walker.style.left = p + '%';
+      // 注意：hidden 是 HTMLElement 的属性，SVG 元素上不生效，必须直接设 display
+      walker.style.display = p > 0 ? '' : 'none';
+      wrap.appendChild(walker);
       if (S.unlocked) {
         var rg = el('input');
         rg.type = 'range'; rg.className = 'barrange';
@@ -694,6 +900,9 @@ footer .sep{margin:0 5px}
           s.progress = v;
           fill.style.transition = 'none';
           fill.style.width = v + '%';
+          walker.style.transition = 'none';
+          walker.style.left = v + '%';
+          walker.style.display = v > 0 ? '' : 'none';
           pctEl.textContent = v + '%';
           touched();
         });
@@ -760,13 +969,14 @@ footer .sep{margin:0 5px}
 
   function render() {
     var d = S.data;
+    // 先揭开 main：renderTimeline 要靠 clientWidth 画栅栏，隐藏时量到的是 0
+    $('loading').hidden = true; $('error').hidden = true; $('main').hidden = false;
     $('wrap').classList.toggle('unlocked', S.unlocked);
     renderHeader(d); renderHero(d);
     renderTodos(d); renderTimeline(d); renderSteps(d); renderLog(d);
     $('lockBtn').textContent = S.unlocked ? '锁定' : '解锁编辑';
     $('lockBtn').className = 'iconbtn' + (S.unlocked ? ' on' : '');
     $('tokFoot').hidden = !S.unlocked;
-    $('loading').hidden = true; $('error').hidden = true; $('main').hidden = false;
     touched();
   }
 
@@ -947,6 +1157,35 @@ footer .sep{margin:0 5px}
 
   window.addEventListener('beforeunload', function (e) {
     if (S.unlocked && countChanges()) { e.preventDefault(); e.returnValue = ''; }
+  });
+
+  /* ═══ 场景 ═══ */
+
+  (function snowfall() {
+    if (calm()) return;
+    var box = $('snow'), n = 14;
+    for (var i = 0; i < n; i++) {
+      var f = el('i');
+      f.style.left = (3 + (i * 7.3 + (i % 4) * 4) % 94) + '%';
+      f.style.setProperty('--dx', (6 + (i % 5) * 5) + 'px');
+      f.style.animationDuration = (7 + (i % 6) * 1.7).toFixed(1) + 's';
+      f.style.animationDelay = (-(i * 1.3) % 9).toFixed(1) + 's';
+      f.style.transform = 'scale(' + (0.7 + (i % 4) * 0.22).toFixed(2) + ')';
+      box.appendChild(f);
+    }
+  })();
+
+  $('figs').addEventListener('click', function () {
+    var g = $('figs');
+    if (g.classList.contains('hop')) return;
+    g.classList.add('hop');
+    setTimeout(function () { g.classList.remove('hop'); }, 900);
+  });
+
+  var tlRedraw;
+  window.addEventListener('resize', function () {
+    clearTimeout(tlRedraw);
+    tlRedraw = setTimeout(function () { if (S.data) renderTimeline(S.data); }, 180);
   });
 
   /* ═══ 首次加载 ═══ */
