@@ -1,0 +1,108 @@
+{
+  "updated": "2026-09-14",
+  "title": "毕业论文进度",
+  "milestones": [
+    {
+      "id": "midterm",
+      "name": "中期检查",
+      "date": "2026-10-31",
+      "approx": true
+    },
+    {
+      "id": "draft",
+      "name": "初稿提交",
+      "date": "2026-12-31",
+      "approx": true
+    },
+    {
+      "id": "defense",
+      "name": "送审 / 答辩",
+      "date": "2027-05-31",
+      "approx": true
+    }
+  ],
+  "stages": [
+    {
+      "id": "data",
+      "name": "数据收集与整理",
+      "status": "active",
+      "progress": 40,
+      "note": "136 站点按缺失率 / 时序异常做 QC，目标筛出 25 站（六大洲、分气候带）"
+    },
+    {
+      "id": "exp",
+      "name": "实验",
+      "status": "todo",
+      "progress": 0,
+      "note": "半小时尺度 DPN（Ta、P vs GPP/NEE/RE；传递熵 + 互信息；同步/反馈/驱动/解耦）→ 月尺度 RF + SHAP（Ta、P、SR、SM、VPD）；FLII 作站点静态变量分组"
+    },
+    {
+      "id": "analysis",
+      "name": "结果分析",
+      "status": "todo",
+      "progress": 0,
+      "note": ""
+    },
+    {
+      "id": "writing",
+      "name": "写作",
+      "status": "todo",
+      "progress": 0,
+      "note": ""
+    },
+    {
+      "id": "revision",
+      "name": "格式与错误修订",
+      "status": "todo",
+      "progress": 0,
+      "note": ""
+    }
+  ],
+  "todos": [
+    {
+      "id": 1,
+      "text": "完成 R 脚本：各站点 NEE/GPP/RE 日尺度绘图与缺失率统计（I:\\ForestFLUX）",
+      "stage": "data",
+      "done": false,
+      "due": "2026-09-21"
+    },
+    {
+      "id": 2,
+      "text": "按缺失率 / 异常结果从 136 站中确定最终 25 站",
+      "stage": "data",
+      "done": false,
+      "due": "2026-09-28"
+    },
+    {
+      "id": 3,
+      "text": "为 25 站提取 FLII（Grantham et al. 2020）站点值",
+      "stage": "data",
+      "done": false,
+      "due": "2026-10-05"
+    },
+    {
+      "id": 4,
+      "text": "统一 25 站半小时数据格式与变量命名，落地整理规范",
+      "stage": "data",
+      "done": false,
+      "due": "2026-10-10"
+    },
+    {
+      "id": 5,
+      "text": "整理中期检查材料：研究方案、站点表、方法流程图",
+      "stage": "data",
+      "done": false,
+      "due": "2026-10-20"
+    }
+  ],
+  "log": [
+    {
+      "date": "2026-09-14",
+      "text": "建立进度看板；当前处于站点筛选与 QC 阶段"
+    },
+    {
+      "date": "2026-09",
+      "text": "方法定稿：半小时 DPN → 月尺度 RF+SHAP；人类活动仅保留 FLII，放弃夜间灯光"
+    }
+  ]
+}

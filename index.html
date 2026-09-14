@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex">
+<title>毕业论文进度</title>
+<style>
+:root{
+  --bg:#f5f6f8; --card:#ffffff; --fg:#16181c; --muted:#6b7280; --faint:#9ca3af;
+  --line:#e6e8ec; --tagbg:#eef0f4;
+  --todo:#9ca3af; --active:#2563eb; --done:#16a34a;
+  --over:#dc2626; --soon:#d97706;
+  --shadow:0 1px 2px rgba(16,18,22,.05), 0 1px 8px rgba(16,18,22,.04);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0f1114; --card:#181b1f; --fg:#e7e9ec; --muted:#9aa1a9; --faint:#767d85;
+    --line:#282c31; --tagbg:#22262b;
+    --todo:#6b7280; --active:#60a5fa; --done:#4ade80;
+    --over:#f87171; --soon:#fbbf24;
+    --shadow:none;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased;
+  overflow-wrap:break-word;
+}
+.wrap{max-width:640px;margin:0 auto;padding:18px 16px 36px}
+header{margin:0 0 14px}
+h1{font-size:20px;line-height:1.25;margin:0;letter-spacing:-.01em}
+.sub{margin-top:4px;font-size:12px;color:var(--faint);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.stale{color:var(--faint);background:var(--tagbg);border-radius:999px;padding:1px 7px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin:0 0 12px;box-shadow:var(--shadow)}
+h2{font-size:13px;font-weight:600;color:var(--muted);margin:0 0 10px;letter-spacing:.02em;display:flex;align-items:baseline;gap:6px}
+h2 .count{font-weight:400;color:var(--faint)}
+
+/* 待办 */
+ul.todos{list-style:none;margin:0;padding:0}
+ul.todos li{display:flex;gap:9px;padding:9px 0;border-top:1px solid var(--line)}
+ul.todos li:first-child{border-top:0;padding-top:0}
+.mark{flex:0 0 auto;width:13px;height:13px;margin-top:4px;border-radius:50%;border:1.5px solid var(--todo)}
+.mark.is-over{border-color:var(--over)}
+.mark.is-soon{border-color:var(--soon)}
+.mark.is-done{border-color:var(--done);background:var(--done)}
+.tbody{min-width:0;flex:1}
+.ttext{font-size:15px;line-height:1.45}
+.tmeta{margin-top:3px;font-size:12px;color:var(--faint);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tag{background:var(--tagbg);color:var(--muted);border-radius:5px;padding:1px 6px;font-size:11px;white-space:nowrap}
+.due.is-over{color:var(--over)}
+.due.is-soon{color:var(--soon)}
+.empty{font-size:14px;color:var(--faint);padding:2px 0}
+details{margin-top:10px;border-top:1px solid var(--line);padding-top:10px}
+summary{font-size:13px;color:var(--muted);cursor:pointer;list-style:none;user-select:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";color:var(--faint)}
+details[open] summary::before{content:"▾ "}
+details ul.todos{margin-top:9px}
+details .ttext{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--faint)}
+
+/* 倒计时 */
+.ms{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.ms .m{padding:2px 0}
+.ms .mname{font-size:13px;font-weight:500}
+.ms .mdate{font-size:11px;color:var(--faint);margin-top:2px}
+.ms .mdays{font-size:19px;font-weight:600;margin-top:5px;line-height:1.2;font-variant-numeric:tabular-nums}
+.ms .mdays small{font-size:11px;font-weight:400;color:var(--faint);margin-left:1px}
+.ms .mdays.is-past{font-size:14px;font-weight:500;color:var(--faint)}
+.ms .mdays.is-soon{color:var(--soon)}
+
+/* 阶段 */
+.stage{padding:11px 0;border-top:1px solid var(--line)}
+.stage:first-child{border-top:0;padding-top:0}
+.stage:last-child{padding-bottom:0}
+.stop{display:flex;align-items:center;gap:7px}
+.sdot{width:7px;height:7px;border-radius:50%;background:var(--todo);flex:0 0 auto}
+.sname{font-size:14px;font-weight:500;flex:1;min-width:0}
+.spct{font-size:12px;color:var(--faint);font-variant-numeric:tabular-nums}
+.bar{height:5px;border-radius:3px;background:var(--tagbg);margin-top:7px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:3px;background:var(--todo);transition:width .4s ease}
+.stage.is-active .sdot,.stage.is-active .bar i{background:var(--active)}
+.stage.is-active .sname{color:var(--fg)}
+.stage.is-done .sdot,.stage.is-done .bar i{background:var(--done)}
+.stage.is-todo .sname{color:var(--muted)}
+.note{margin:7px 0 0;font-size:12px;line-height:1.55;color:var(--faint)}
+
+/* 日志 */
+ol.log{list-style:none;margin:0;padding:0 0 0 15px;position:relative}
+ol.log::before{content:"";position:absolute;left:3px;top:5px;bottom:5px;width:1px;background:var(--line)}
+ol.log li{position:relative;padding:0 0 12px}
+ol.log li:last-child{padding-bottom:0}
+ol.log li::before{content:"";position:absolute;left:-15px;top:5px;width:7px;height:7px;border-radius:50%;background:var(--line)}
+ol.log li:first-child::before{background:var(--active)}
+.ldate{font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums}
+.ltext{font-size:14px;line-height:1.5;margin-top:1px}
+button.more{margin-top:10px;background:none;border:1px solid var(--line);color:var(--muted);
+  border-radius:7px;padding:5px 11px;font-size:12px;cursor:pointer;font-family:inherit}
+button.more:active{background:var(--tagbg)}
+
+.err{color:var(--over);font-size:14px;line-height:1.6}
+.err .hint{display:block;margin-top:6px;color:var(--faint);font-size:12px}
+#loading{color:var(--faint);font-size:14px;padding:4px}
+footer{margin-top:18px;text-align:center;font-size:12px;color:var(--faint)}
+footer a{color:var(--faint)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 id="title">毕业论文进度</h1>
+    <div class="sub">
+      <span id="updated"></span>
+      <span id="stale" class="stale" hidden>数据可能过期</span>
+    </div>
+  </header>
+
+  <div id="loading">加载中…</div>
+  <div id="error" class="card err" hidden></div>
+
+  <main id="main" hidden>
+    <section class="card">
+      <h2>待办 <span class="count" id="todoCount"></span></h2>
+      <ul class="todos" id="todoList"></ul>
+      <p class="empty" id="todoEmpty" hidden>暂无未完成待办。</p>
+      <details id="doneWrap" hidden>
+        <summary>已完成 (<span id="doneCount">0</span>)</summary>
+        <ul class="todos" id="doneList"></ul>
+      </details>
+    </section>
+
+    <section class="card">
+      <h2>倒计时</h2>
+      <div class="ms" id="milestones"></div>
+    </section>
+
+    <section class="card">
+      <h2>阶段</h2>
+      <div id="stages"></div>
+    </section>
+
+    <section class="card">
+      <h2>更新日志</h2>
+      <ol class="log" id="log"></ol>
+      <button class="more" id="logMore" hidden>展开全部</button>
+    </section>
+  </main>
+
+  <footer>
+    <a href="https://github.com/mountmiaa-sudo/thesis-board" target="_blank" rel="noopener">mountmiaa-sudo/thesis-board</a>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var DAY = 86400000;
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = String(text);
+    return n;
+  }
+
+  // 解析 "YYYY-MM-DD" / "YYYY-MM" 为本地零点，避免时区偏移
+  function parseDate(s) {
+    var p = String(s == null ? '' : s).trim().split('-');
+    if (p.length < 2) return null;
+    var y = +p[0], m = +p[1], d = p.length > 2 ? +p[2] : 1;
+    if (!(y > 0) || !(m >= 1 && m <= 12) || !(d >= 1 && d <= 31)) return null;
+    var dt = new Date(y, m - 1, d);
+    return isNaN(dt.getTime()) ? null : dt;
+  }
+  function today() {
+    var n = new Date();
+    return new Date(n.getFullYear(), n.getMonth(), n.getDate());
+  }
+  function daysFromToday(dt) { return Math.round((dt - today()) / DAY); }
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function mmdd(dt) { return pad(dt.getMonth() + 1) + '-' + pad(dt.getDate()); }
+  function ymd(dt) { return dt.getFullYear() + '-' + mmdd(dt); }
+
+  function dueClass(d) { return d < 0 ? 'is-over' : (d <= 7 ? 'is-soon' : ''); }
+  function dueLabel(d) {
+    if (d < 0) return '已逾期 ' + (-d) + ' 天';
+    if (d === 0) return '今天截止';
+    return '剩 ' + d + ' 天';
+  }
+
+  function showError(msg, hint) {
+    $('loading').hidden = true;
+    $('main').hidden = true;
+    var box = $('error');
+    box.textContent = '';
+    box.appendChild(el('div', null, msg));
+    if (hint) box.appendChild(el('span', 'hint', hint));
+    box.hidden = false;
+  }
+
+  // ---------- 渲染 ----------
+
+  function renderHeader(data) {
+    if (data.title) { document.title = data.title; $('title').textContent = data.title; }
+    var u = parseDate(data.updated);
+    $('updated').textContent = u ? '更新于 ' + ymd(u) : '更新时间未知';
+    $('stale').hidden = !(u && daysFromToday(u) < -7);
+  }
+
+  function todoItem(t, stageName, isDone) {
+    var li = el('li');
+    var due = parseDate(t.due);
+    var d = due ? daysFromToday(due) : null;
+    var cls = isDone ? 'is-done' : (d === null ? '' : dueClass(d));
+
+    li.appendChild(el('span', 'mark ' + cls));
+    var body = el('div', 'tbody');
+    body.appendChild(el('div', 'ttext', t.text || ''));
+
+    var meta = el('div', 'tmeta');
+    if (stageName) meta.appendChild(el('span', 'tag', stageName));
+    if (due) {
+      var txt = mmdd(due) + (isDone || d === null ? '' : ' · ' + dueLabel(d));
+      meta.appendChild(el('span', 'due ' + (isDone ? '' : cls), txt));
+    }
+    if (meta.childNodes.length) body.appendChild(meta);
+
+    li.appendChild(body);
+    return li;
+  }
+
+  function renderTodos(data) {
+    var names = {};
+    (data.stages || []).forEach(function (s) { names[s.id] = s.name; });
+
+    var all = data.todos || [];
+    var open = all.filter(function (t) { return !t.done; });
+    var done = all.filter(function (t) { return !!t.done; });
+
+    // 未完成按 due 升序；无 due 排在最后
+    open.sort(function (a, b) {
+      var x = parseDate(a.due), y = parseDate(b.due);
+      if (!x && !y) return 0;
+      if (!x) return 1;
+      if (!y) return -1;
+      return x - y;
+    });
+
+    var list = $('todoList');
+    list.textContent = '';
+    open.forEach(function (t) { list.appendChild(todoItem(t, names[t.stage], false)); });
+    $('todoEmpty').hidden = open.length > 0;
+    $('todoCount').textContent = open.length ? open.length + ' 项未完成' : '';
+
+    if (done.length) {
+      // 已完成按 due 倒序（近期在前）
+      done.sort(function (a, b) {
+        var x = parseDate(a.due), y = parseDate(b.due);
+        return (y ? +y : 0) - (x ? +x : 0);
+      });
+      var dl = $('doneList');
+      dl.textContent = '';
+      done.forEach(function (t) { dl.appendChild(todoItem(t, names[t.stage], true)); });
+      $('doneCount').textContent = done.length;
+      $('doneWrap').hidden = false;
+    } else {
+      $('doneWrap').hidden = true;
+    }
+  }
+
+  function renderMilestones(data) {
+    var box = $('milestones');
+    box.textContent = '';
+    var ms = data.milestones || [];
+    box.style.gridTemplateColumns = 'repeat(' + Math.max(1, Math.min(3, ms.length)) + ',1fr)';
+
+    ms.forEach(function (m) {
+      var cell = el('div', 'm');
+      cell.appendChild(el('div', 'mname', m.name || ''));
+      var dt = parseDate(m.date);
+      cell.appendChild(el('div', 'mdate', (m.approx ? '约 ' : '') + (dt ? ymd(dt) : (m.date || '—'))));
+
+      var days = el('div', 'mdays');
+      if (!dt) {
+        days.textContent = '—';
+        days.className = 'mdays is-past';
+      } else {
+        var d = daysFromToday(dt);
+        if (d < 0) { days.textContent = '已过'; days.className = 'mdays is-past'; }
+        else if (d === 0) { days.textContent = '今天'; days.className = 'mdays is-soon'; }
+        else {
+          days.textContent = String(d);
+          days.appendChild(el('small', null, ' 天'));
+          if (d <= 30) days.className = 'mdays is-soon';
+        }
+      }
+      cell.appendChild(days);
+      box.appendChild(cell);
+    });
+  }
+
+  function renderStages(data) {
+    var box = $('stages');
+    box.textContent = '';
+    (data.stages || []).forEach(function (s) {
+      var st = (s.status === 'active' || s.status === 'done') ? s.status : 'todo';
+      var p = Math.max(0, Math.min(100, Math.round(+s.progress || 0)));
+
+      var row = el('div', 'stage is-' + st);
+      var top = el('div', 'stop');
+      top.appendChild(el('span', 'sdot'));
+      top.appendChild(el('span', 'sname', s.name || ''));
+      top.appendChild(el('span', 'spct', p + '%'));
+      row.appendChild(top);
+
+      var bar = el('div', 'bar');
+      var fill = el('i');
+      fill.style.width = p + '%';
+      bar.appendChild(fill);
+      row.appendChild(bar);
+
+      if (s.note) row.appendChild(el('p', 'note', s.note));
+      box.appendChild(row);
+    });
+  }
+
+  function renderLog(data) {
+    var items = (data.log || []).slice(0, 30);
+    var ol = $('log');
+    var btn = $('logMore');
+    var expanded = false;
+
+    function draw() {
+      ol.textContent = '';
+      var show = expanded ? items : items.slice(0, 5);
+      show.forEach(function (e) {
+        var li = el('li');
+        var dt = parseDate(e.date);
+        li.appendChild(el('div', 'ldate', dt ? (String(e.date).length <= 7 ? e.date : ymd(dt)) : (e.date || '')));
+        li.appendChild(el('div', 'ltext', e.text || ''));
+        ol.appendChild(li);
+      });
+      btn.textContent = expanded ? '收起' : '展开全部 (' + items.length + ')';
+    }
+
+    btn.hidden = items.length <= 5;
+    btn.onclick = function () { expanded = !expanded; draw(); };
+    draw();
+  }
+
+  function render(data) {
+    renderHeader(data);
+    renderTodos(data);
+    renderMilestones(data);
+    renderStages(data);
+    renderLog(data);
+    $('loading').hidden = true;
+    $('error').hidden = true;
+    $('main').hidden = false;
+  }
+
+  // ---------- 加载 ----------
+
+  fetch('progress.json?t=' + Date.now(), { cache: 'no-store' })
+    .then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.text();
+    })
+    .then(function (txt) {
+      var data;
+      try { data = JSON.parse(txt); }
+      catch (e) { throw new Error('progress.json 格式错误：' + e.message); }
+      if (!data || typeof data !== 'object') throw new Error('progress.json 内容不是对象');
+      render(data);
+    })
+    .catch(function (e) {
+      var hint = location.protocol === 'file:'
+        ? '当前以 file:// 打开，浏览器会拦截本地读取。请通过 GitHub Pages 站点访问，或在目录内启动本地服务器。'
+        : '请确认 progress.json 与本页在同一目录，且内容为合法 JSON。';
+      showError('加载失败：' + e.message, hint);
+    });
+})();
+</script>
+</body>
+</html>
