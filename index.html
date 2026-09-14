@@ -8,30 +8,51 @@
 <title>毕业论文进度</title>
 <style>
 :root{
-  --bg:#f4f5f7; --card:#ffffff; --fg:#15171b; --muted:#666d76; --faint:#9aa1aa;
-  --line:#e5e8ec; --sunk:#eef0f3; --field:#ffffff;
-  --accent:#2f6df0; --todo:#a3aab3; --active:#2f6df0; --done:#12a150;
-  --over:#dc2626; --soon:#d97706;
-  --shadow:0 1px 2px rgba(16,18,22,.04), 0 2px 12px rgba(16,18,22,.05);
-  --ring:rgba(47,109,240,.18); --edit:rgba(47,109,240,.07);
+  /* 纸本冬景：暖粉天光、灰紫远山、灰蓝雪原、赭棕小熊 */
+  --bg:#F5F2ED; --card:#FDFBF7; --fg:#3B3742; --muted:#5F5868; --faint:#6E6878;
+  --line:#E6E0D8; --sunk:#EAE3D9; --field:#FEFCF9;
+  --accent:#7E9AB5; --accent-s:#5C7A96; --on-accent:#FDFBF7;
+  --todo:#A8A2B0; --active:#7E9AB5; --done:#9A6636;
+  --warm:#A87542; --rail:#DCCBB6;
+  --over:#9E4A3C; --soon:#8A6330;
+  --shadow:0 1px 2px rgba(90,78,72,.05), 0 3px 14px rgba(90,78,72,.06);
+  --ring:rgba(126,154,181,.22); --edit:rgba(126,154,181,.10);
+  --sky:linear-gradient(180deg,#F9DCD1 0,#F5E5DC 120px,#F5F2ED 320px);
+  --serif:Georgia,"Songti SC","Noto Serif CJK SC","Source Han Serif SC","SimSun",serif;
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)' opacity='0.14'/%3E%3C/svg%3E");
 }
 @media (prefers-color-scheme:dark){
   :root{
-    --bg:#0d0f12; --card:#16191d; --fg:#e8eaed; --muted:#98a0a9; --faint:#727a84;
-    --line:#262b31; --sunk:#1f242a; --field:#1b1f24;
-    --accent:#5b8cff; --todo:#5f6772; --active:#5b8cff; --done:#2fc36b;
-    --over:#f87171; --soon:#f0a32e;
+    /* 同一片雪原的黄昏 */
+    --bg:#17151B; --card:#201E26; --fg:#E5DFE4; --muted:#A29CA8; --faint:#8D8794;
+    --line:#2E2B35; --sunk:#28252F; --field:#1D1B23;
+    --accent:#8FA8C2; --accent-s:#8FA8C2; --on-accent:#17151B;
+    --todo:#5F5A6A; --active:#8FA8C2; --done:#C79466;
+    --warm:#C79466; --rail:#463B31;
+    --over:#E0907F; --soon:#D2A468;
     --shadow:none;
-    --ring:rgba(91,140,255,.22); --edit:rgba(91,140,255,.09);
+    --ring:rgba(143,168,194,.24); --edit:rgba(143,168,194,.12);
+    --sky:linear-gradient(180deg,#2A2029 0,#1F1B23 130px,#17151B 320px);
   }
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%}
 body{
-  margin:0;background:var(--bg);color:var(--fg);
+  margin:0;color:var(--fg);
+  background-color:var(--bg);
+  background-image:var(--grain),var(--sky);
+  background-size:140px 140px,100% 320px;
+  background-repeat:repeat,no-repeat;
+  background-blend-mode:multiply,normal;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
   font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-wrap:break-word;
+}
+/* 卡片也带纸纹，避免浮在背景上像贴纸 */
+.card,.hero,.tok{
+  background-image:var(--grain);
+  background-size:140px 140px;
+  background-blend-mode:multiply;
 }
 body.dirty{padding-bottom:78px}
 .wrap{max-width:640px;margin:0 auto;padding:16px 14px 32px}
@@ -39,7 +60,7 @@ body.dirty{padding-bottom:78px}
 /* ── 顶栏 ───────────────────────────── */
 .top{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
 .top .t{flex:1;min-width:0}
-h1{font-size:19px;line-height:1.25;margin:0;letter-spacing:-.015em}
+h1{font-size:20px;line-height:1.3;margin:0;letter-spacing:.01em;font-family:var(--serif);font-weight:600}
 .sub{margin-top:3px;font-size:11.5px;color:var(--faint);display:flex;flex-wrap:wrap;gap:7px;align-items:center}
 .pill{background:var(--sunk);border-radius:999px;padding:1px 7px}
 .iconbtn{
@@ -48,7 +69,7 @@ h1{font-size:19px;line-height:1.25;margin:0;letter-spacing:-.015em}
   font-family:inherit;cursor:pointer;min-height:34px;white-space:nowrap
 }
 .iconbtn:active{background:var(--sunk)}
-.iconbtn.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.iconbtn.on{background:var(--accent-s);border-color:var(--accent-s);color:var(--on-accent)}
 
 /* ── 概览条 ─────────────────────────── */
 .hero{
@@ -59,9 +80,9 @@ h1{font-size:19px;line-height:1.25;margin:0;letter-spacing:-.015em}
 .ringwrap svg{width:50px;height:50px;transform:rotate(-90deg);display:block}
 .ringwrap circle{fill:none;stroke-width:3.6;stroke-linecap:round}
 .ring-bg{stroke:var(--sunk)}
-.ring-fg{stroke:var(--accent);transition:stroke-dasharray .5s cubic-bezier(.4,0,.2,1)}
+.ring-fg{stroke:var(--warm);transition:stroke-dasharray .5s cubic-bezier(.4,0,.2,1)}
 .ringtxt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  font-size:13px;font-weight:650;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  font-family:var(--serif);font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:0}
 .herostat{min-width:0;flex:1}
 .hs1{font-size:14.5px;font-weight:560;display:flex;flex-wrap:wrap;gap:8px;align-items:baseline}
 .hs1 .warn{font-size:12.5px;font-weight:500;color:var(--over)}
@@ -69,7 +90,7 @@ h1{font-size:19px;line-height:1.25;margin:0;letter-spacing:-.015em}
 .hs2 b{color:var(--muted);font-weight:600;font-variant-numeric:tabular-nums}
 
 /* ── 卡片 ───────────────────────────── */
-.card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:13px 14px;margin:0 0 11px;box-shadow:var(--shadow)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 15px;margin:0 0 11px;box-shadow:var(--shadow)}
 h2{font-size:12px;font-weight:640;color:var(--muted);margin:0 0 11px;letter-spacing:.04em;display:flex;align-items:baseline;gap:6px}
 h2 .count{font-weight:400;color:var(--faint);letter-spacing:0}
 
@@ -124,17 +145,17 @@ details ul.todos{margin-top:9px}
 
 /* ── 里程碑时间轴 ───────────────────── */
 .tl{position:relative;height:94px;margin:2px 0 0}
-.tl-rail{position:absolute;left:36px;right:36px;top:41px;height:3px;background:var(--sunk);border-radius:2px}
+.tl-rail{position:absolute;left:36px;right:36px;top:41px;height:2px;background:var(--rail);border-radius:2px}
 .tl-node{position:absolute;top:16px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;width:max-content}
 .tl-name{font-size:12px;font-weight:550;line-height:16px;white-space:nowrap}
 .tl-dot{width:11px;height:11px;border-radius:50%;background:var(--card);border:2.5px solid var(--todo);margin:5px 0 4px;box-sizing:border-box}
 .tl-date{font-size:10.5px;color:var(--faint);line-height:14px;white-space:nowrap;font-variant-numeric:tabular-nums;
   border:0;background:none;font-family:inherit;padding:1px 5px;border-radius:4px}
 .unlocked button.tl-date{cursor:pointer;background:var(--sunk);min-height:22px}
-.tl-days{font-size:13px;font-weight:650;line-height:16px;white-space:nowrap;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.tl-days{font-family:var(--serif);font-size:14px;font-weight:600;line-height:17px;white-space:nowrap;font-variant-numeric:tabular-nums}
 .tl-days small{font-size:10px;font-weight:400;color:var(--faint);margin-left:1px}
-.tl-node.is-now .tl-name{color:var(--accent)}
-.tl-node.is-now .tl-dot{background:var(--accent);border-color:var(--accent)}
+.tl-node.is-now .tl-name{color:var(--warm)}
+.tl-node.is-now .tl-dot{background:var(--warm);border-color:var(--warm)}
 .tl-node.is-soon .tl-dot{border-color:var(--soon)}
 .tl-node.is-soon .tl-days{color:var(--soon)}
 .tl-node.is-past .tl-name,.tl-node.is-past .tl-days{color:var(--faint);font-weight:500}
@@ -195,7 +216,7 @@ ol.log::before{content:"";position:absolute;left:3px;top:6px;bottom:6px;width:1p
 ol.log li{position:relative;padding:0 0 12px;display:flex;gap:2px;align-items:flex-start}
 ol.log li:last-child{padding-bottom:0}
 ol.log li::before{content:"";position:absolute;left:-15px;top:6px;width:7px;height:7px;border-radius:50%;background:var(--line)}
-ol.log li:first-child::before{background:var(--accent)}
+ol.log li:first-child::before{background:var(--warm)}
 .lbody{flex:1;min-width:0}
 .ldate{font-size:10.5px;color:var(--faint);font-variant-numeric:tabular-nums;border:0;background:none;
   font-family:inherit;padding:1px 5px;margin-left:-5px;border-radius:4px;display:inline-block}
@@ -220,7 +241,7 @@ ol.log li:first-child::before{background:var(--accent)}
 .savebar .cnt{flex:1;min-width:0;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
 .btn{appearance:none;border-radius:9px;padding:9px 15px;font-size:14px;font-family:inherit;
   cursor:pointer;min-height:42px;border:1px solid var(--line);background:var(--card);color:var(--muted);white-space:nowrap}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:560}
+.btn.primary{background:var(--accent-s);border-color:var(--accent-s);color:var(--on-accent);font-weight:560}
 .btn:disabled{opacity:.5;cursor:default}
 
 /* ── token 面板 ─────────────────────── */
