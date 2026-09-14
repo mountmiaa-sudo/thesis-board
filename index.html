@@ -312,26 +312,39 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--ring);outline-of
 .party-sub{margin:5px 0 13px;font-size:12px;color:var(--faint)}
 .anim .party-sub{animation:fadein 1.2s var(--ease) 2s backwards}
 
-/* 走近 → 相拥 → 摇摆 */
-@keyframes walk-e{0%{transform:translateX(-46px)}100%{transform:translateX(0)}}
-@keyframes walk-b{0%{transform:translateX(46px)}100%{transform:translateX(0)}}
-@keyframes sway-e{0%,100%{transform:translate(0,0) rotate(-2.6deg)}50%{transform:translate(0,-5px) rotate(2.2deg)}}
-@keyframes sway-b{0%,100%{transform:translate(0,-5px) rotate(2.6deg)}50%{transform:translate(0,0) rotate(-2.2deg)}}
-@keyframes armsin{0%{opacity:0;transform:scale(.82)}60%{opacity:1;transform:scale(1.04)}100%{opacity:1;transform:scale(1)}}
-@keyframes sway-a{0%,100%{transform:translateY(-2px) rotate(.9deg)}50%{transform:translateY(-4px) rotate(-.9deg)}}
-.anim .p-e{animation:walk-e 2s var(--ease) backwards, sway-e 2.4s ease-in-out 2s infinite}
-.anim .p-b{animation:walk-b 2s var(--ease) backwards, sway-b 2.4s ease-in-out 2s infinite}
-.p-arms{transform-origin:152px 128px}
-.anim .p-arms{animation:armsin 1.1s var(--ease) 1.7s backwards, sway-a 2.4s ease-in-out 2.8s infinite}
-@keyframes notefloat{
-  0%{transform:translate(0,0) rotate(-8deg) scale(.5);opacity:0}
-  18%{opacity:.95;transform:translate(var(--nx1,-6px),-14px) rotate(4deg) scale(1)}
-  100%{transform:translate(var(--nx2,-20px),-62px) rotate(-14deg) scale(.85);opacity:0}}
-.p-note{transform-origin:center;opacity:0}
-.anim .p-note{animation:notefloat 3.4s ease-in-out infinite}
-@keyframes glow{0%,100%{opacity:.10}50%{opacity:.22}}
-.p-glow{opacity:.16}
-.anim .p-glow{animation:glow 3.6s ease-in-out 2s infinite}
+/* 一起滑下坡：起步慢、中段快、到底缓缓停住 */
+@keyframes ride{
+  0%{transform:translate(-170px,-66px) rotate(-10deg);opacity:0}
+  7%{opacity:1}
+  100%{transform:translate(0,0) rotate(0);opacity:1}}
+@keyframes trail{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+@keyframes spray{
+  0%{opacity:0;transform:translate(0,0) scale(.35)}
+  28%{opacity:.9}
+  100%{opacity:0;transform:translate(var(--sx,-30px),var(--sy,-12px)) scale(1.6)}}
+@keyframes puff{
+  0%{opacity:0;transform:scale(.3)}
+  34%{opacity:.85}
+  100%{opacity:0;transform:scale(1.8)}}
+@keyframes pflake{
+  0%{transform:translate(0,-16px);opacity:0}
+  14%{opacity:.95}
+  86%{opacity:.8}
+  100%{transform:translate(var(--fx,10px),186px);opacity:0}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2.5px)}}
+
+.p-trail{stroke-dasharray:100;stroke-dashoffset:0}
+.p-spray,.p-puff{opacity:0;transform-box:fill-box;transform-origin:center}
+.p-flake{opacity:0;transform-box:fill-box;transform-origin:center}
+.p-ride{transform-box:fill-box;transform-origin:center}
+.p-riders{transform-box:fill-box;transform-origin:center}
+
+.anim .p-ride{animation:ride 4.2s cubic-bezier(.42,0,.28,1) backwards}
+.anim .p-trail{animation:trail 4.2s cubic-bezier(.42,0,.28,1) backwards}
+.anim .p-spray{animation:spray 1.5s ease-out infinite}
+.anim .p-puff{animation:puff 1.7s var(--ease) backwards}
+.anim .p-flake{animation:pflake 9s linear infinite}
+.anim .p-riders{animation:bob 2.8s ease-in-out 4.5s infinite}
 
 /* ── 入场 ───────────────────────────── */
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
@@ -352,8 +365,9 @@ footer a{color:var(--faint)}
   *{transition:none!important}
   .snow{display:none}
   .hero,#main section.card,.mark.just .paw,.figs.hop .fig-e,.figs.hop .fig-b,
-  .party,.party-card,.party-txt,.party-sub,.p-e,.p-b,.p-arms,.p-note,.p-glow,.savebar{animation:none!important;opacity:1!important}
-  .p-e,.p-b,.p-arms{transform:none!important}
+  .party,.party-card,.party-txt,.party-sub,.p-ride,.p-trail,.p-riders,.savebar{animation:none!important;opacity:1!important}
+  .p-ride,.p-riders{transform:none!important}
+  .p-spray,.p-puff,.p-flake{display:none}
 }
 </style>
 </head>
@@ -547,39 +561,83 @@ footer a{color:var(--faint)}
 
 <div class="party" id="party" hidden>
   <div class="party-card">
-    <svg class="party-svg" viewBox="0 0 300 190" aria-hidden="true">
-      <ellipse class="p-glow" cx="152" cy="156" rx="66" ry="11" fill="var(--warm)"/>
-      <g filter="url(#pencil)">
-        <!-- 小象 -->
-        <g class="p-e">
-          <ellipse cx="124" cy="128" rx="29" ry="27" fill="var(--fig-e)"/>
-          <ellipse cx="101" cy="105" rx="15" ry="14" fill="var(--fig-e)"/>
-          <circle cx="134" cy="120" r="2.5" fill="var(--card)" opacity=".9"/>
-          <path d="M108 140q-9 8-4 17" stroke="var(--fig-e)" stroke-width="9"
-                fill="none" stroke-linecap="round"/>
+    <svg class="party-svg" viewBox="0 0 300 192" aria-hidden="true">
+      <defs>
+        <clipPath id="pclip"><rect x="0" y="0" width="300" height="192" rx="12"/></clipPath>
+      </defs>
+      <g clip-path="url(#pclip)">
+        <!-- 雪坡 -->
+        <path d="M-10 56 C60 68 140 104 312 152 L312 200 L-10 200Z"
+              fill="var(--band)" opacity=".55"/>
+        <path d="M-10 56 C60 68 140 104 312 152"
+              fill="none" stroke="var(--track)" stroke-width="1.4" opacity=".75"/>
+        <!-- 坡上被雪橇压出的痕，随他们滑过逐渐显现 -->
+        <path class="p-trail" pathLength="100"
+              d="M-6 60 C58 72 132 102 196 132"
+              fill="none" stroke="var(--sled)" stroke-width="1.8"
+              stroke-linecap="round" opacity=".5"/>
+
+        <!-- 落雪 -->
+        <g fill="var(--card)">
+          <ellipse class="p-flake" style="--fx:16px;animation-delay:0s"    cx="46"  cy="14" rx="2.2" ry="4"/>
+          <ellipse class="p-flake" style="--fx:-12px;animation-delay:1.3s" cx="112" cy="8"  rx="2"   ry="3.6"/>
+          <ellipse class="p-flake" style="--fx:20px;animation-delay:2.4s" cx="188" cy="16" rx="2.3" ry="4.2"/>
+          <ellipse class="p-flake" style="--fx:-16px;animation-delay:3.1s" cx="252" cy="6"  rx="2"   ry="3.6"/>
+          <ellipse class="p-flake" style="--fx:10px;animation-delay:4.2s"  cx="80"  cy="10" rx="2.1" ry="3.8"/>
         </g>
-        <!-- 小熊 -->
-        <g class="p-b">
-          <ellipse cx="183" cy="133" rx="25" ry="23" fill="var(--fig-b)"/>
-          <ellipse cx="166" cy="112" rx="10" ry="10" fill="var(--fig-b)"/>
-          <ellipse cx="201" cy="111" rx="10" ry="10" fill="var(--fig-b)"/>
-          <circle cx="176" cy="127" r="2.3" fill="var(--card)" opacity=".9"/>
+
+        <g class="p-ride">
+          <!-- 滑板扬起的雪雾 -->
+          <g fill="var(--card)">
+            <ellipse class="p-spray" style="--sx:-30px;--sy:-14px;animation-delay:1.1s" cx="168" cy="138" rx="7" ry="5"/>
+            <ellipse class="p-spray" style="--sx:-40px;--sy:-6px;animation-delay:1.6s"  cx="164" cy="142" rx="6" ry="4.4"/>
+            <ellipse class="p-spray" style="--sx:-34px;--sy:-20px;animation-delay:2.2s" cx="170" cy="134" rx="5.4" ry="4"/>
+            <ellipse class="p-spray" style="--sx:-44px;--sy:-10px;animation-delay:2.9s" cx="166" cy="140" rx="6.4" ry="4.6"/>
+          </g>
+
+          <g filter="url(#pencil)">
+            <!-- 雪橇 -->
+            <g stroke="var(--sled)" stroke-width="3" fill="none"
+               stroke-linecap="round" stroke-linejoin="round">
+              <path d="M176 131h62"/>
+              <path d="M172 141h66q9.5 0 12.5-8.5"/>
+              <path d="M187 131v10M224 131v10"/>
+            </g>
+            <!-- 坐在上面的两只：小熊在后，小象在前 -->
+            <g class="p-riders">
+              <g class="p-b2">
+                <ellipse cx="194" cy="119" rx="12" ry="11" fill="var(--fig-b)"/>
+                <ellipse cx="186" cy="110" rx="5" ry="5" fill="var(--fig-b)"/>
+                <ellipse cx="202" cy="110" rx="5" ry="5" fill="var(--fig-b)"/>
+                <circle cx="199" cy="117" r="1.5" fill="var(--fieldsnow)"/>
+                <path d="M204 122q9-2 12 4" stroke="var(--fig-b)" stroke-width="4"
+                      fill="none" stroke-linecap="round"/>
+              </g>
+              <g class="p-e2">
+                <ellipse cx="225" cy="118" rx="13" ry="11.5" fill="var(--fig-e)"/>
+                <ellipse cx="216" cy="109" rx="6.2" ry="5.8" fill="var(--fig-e)"/>
+                <circle cx="231" cy="116" r="1.5" fill="var(--band)"/>
+                <path d="M236 119q7 2 6 9" stroke="var(--fig-e)" stroke-width="4.2"
+                      fill="none" stroke-linecap="round"/>
+                <path d="M214 124q-8 3-9 9" stroke="var(--fig-e)" stroke-width="4"
+                      fill="none" stroke-linecap="round"/>
+              </g>
+            </g>
+          </g>
         </g>
-        <!-- 环抱的手臂画在最上层，才看得出是抱在一起 -->
-        <g class="p-arms">
-          <path d="M141 112q22-9 42 4" stroke="var(--fig-e)" stroke-width="10"
-                fill="none" stroke-linecap="round"/>
-          <path d="M166 143q-21 6-36-6" stroke="var(--fig-b)" stroke-width="9"
-                fill="none" stroke-linecap="round"/>
+
+        <!-- 停下那一刻掀起的雪 -->
+        <g fill="var(--card)">
+          <ellipse class="p-puff" style="animation-delay:4.0s" cx="248" cy="142" rx="10" ry="6"/>
+          <ellipse class="p-puff" style="animation-delay:4.25s" cx="262" cy="136" rx="7"  ry="4.6"/>
+          <ellipse class="p-puff" style="animation-delay:4.5s"  cx="236" cy="147" rx="8"  ry="5"/>
         </g>
       </g>
-      <g id="partyNotes" fill="var(--warm)"></g>
     </svg>
     <p class="party-txt" id="partyTxt">今天的计划，全部做完了</p>
-    <p class="party-sub" id="partySub">他们抱在一起，唱了首歌</p>
+    <p class="party-sub" id="partySub">他们坐上雪橇，从坡顶一路滑了下去</p>
     <button class="btn primary" id="partyClose">好</button>
   </div>
-</div>
 
 <script>
 (function () {
@@ -1158,30 +1216,6 @@ footer a{color:var(--faint)}
   }
 
   /* ═══ 庆祝 ═══ */
-  function makeNotes() {
-    var g = clear($('partyNotes'));
-    var spots = [[106, 96], [146, 76], [198, 88], [124, 66], [176, 60], [214, 100]];
-    spots.forEach(function (sp, i) {
-      var n = svgEl('g');
-      n.setAttribute('class', 'p-note');
-      n.setAttribute('transform', 'translate(' + sp[0] + ',' + sp[1] + ')');
-      n.style.setProperty('--nx1', (i % 2 ? 7 : -7) + 'px');
-      n.style.setProperty('--nx2', (i % 2 ? 20 : -20) + 'px');
-      n.style.animationDelay = (2.0 + i * 0.34).toFixed(2) + 's';
-      var head = svgEl('ellipse');
-      head.setAttribute('cx', '0'); head.setAttribute('cy', '8');
-      head.setAttribute('rx', '3.6'); head.setAttribute('ry', '2.8');
-      head.setAttribute('transform', 'rotate(-18)');
-      n.appendChild(head);
-      var stem = svgEl('path');
-      stem.setAttribute('d', i % 2 ? 'M3.2 7.4V-4h7' : 'M3.2 7.4V-4');
-      stem.setAttribute('stroke', 'var(--warm)'); stem.setAttribute('stroke-width', '1.6');
-      stem.setAttribute('fill', 'none'); stem.setAttribute('stroke-linecap', 'round');
-      n.appendChild(stem);
-      g.appendChild(n);
-    });
-  }
-
   function chime() {
     if (lsGet(K_SOUND) === 'off' || calm()) return;
     try {
@@ -1203,7 +1237,6 @@ footer a{color:var(--faint)}
   }
 
   function openParty() {
-    makeNotes();
     $('party').hidden = false;
     chime();
     clearTimeout(openParty.to);
