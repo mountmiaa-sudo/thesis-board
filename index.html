@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
 <meta name="robots" content="noindex">
+<!-- GitHub Pages 给 HTML 的缓存有效期约 10 分钟，手机上常拿到旧版本 -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>毕业论文进度</title>
 <style>
 :root{
@@ -191,8 +195,12 @@ details ul.items{margin-top:9px}
 .dayprog{height:4px;border-radius:2px;background:var(--sunk);margin:0 0 11px;overflow:hidden}
 .dayprog i{display:block;height:100%;border-radius:2px;background:var(--warm);width:0;
   transition:width 1s var(--ease)}
-.allok{font-size:12px;color:var(--warm);display:flex;align-items:center;gap:5px;margin-top:10px}
-.allok .paw{width:14px;height:14px;display:inline-block}
+.allok{margin-top:10px}
+.okbtn{appearance:none;background:var(--sunk);border:0;border-radius:9px;padding:8px 11px;
+  font-family:inherit;font-size:12.5px;color:var(--warm);cursor:pointer;min-height:38px;
+  display:inline-flex;align-items:center;gap:6px;transition:background .3s var(--ease)}
+.okbtn:active{background:var(--line)}
+.okbtn .paw{width:15px;height:15px;flex:0 0 auto}
 
 /* ── 里程碑栅栏 ─────────────────────── */
 .tl{position:relative;height:94px;margin:2px 0 0}
@@ -488,6 +496,7 @@ footer a{color:var(--faint)}
       <h3>其它</h3>
       <label class="toggle"><input type="checkbox" id="soundChk"> 完成每日计划时播放音效</label>
       <div class="btnrow">
+        <button class="btn" id="previewBtn">预览庆祝动画</button>
         <button class="btn" id="revertBtn">放弃本地改动</button>
       </div>
     </div>
@@ -913,8 +922,12 @@ footer a{color:var(--faint)}
 
     var ok = clear($('allok'));
     if (n > 0 && done === n) {
-      ok.appendChild(pawIcon('paw'));
-      ok.appendChild(el('span', null, '今天的都做完了'));
+      var b = el('button', 'okbtn');
+      b.type = 'button';
+      b.appendChild(pawIcon('paw'));
+      b.appendChild(el('span', null, '今天的都做完了 · 再看一次'));
+      b.addEventListener('click', openParty);
+      ok.appendChild(b);
       ok.hidden = false;
     } else { ok.hidden = true; }
   }
@@ -1211,6 +1224,7 @@ footer a{color:var(--faint)}
     renderHeader(d); renderHero(d);
     renderDaily(d); renderTodos(d); renderTimeline(d); renderSteps(d); renderLog(d);
     renderSheet(d);
+    maybeParty(d);   // 例如改完在别处完成、刷新回来时补放
     $('gearBtn').hidden = false;
     touched();
   }
@@ -1371,6 +1385,10 @@ footer a{color:var(--faint)}
     S.data = clone(S.base);
     msg(''); $('saveBar').hidden = true; document.body.classList.remove('hasbar');
     render();
+  });
+  $('previewBtn').addEventListener('click', function () {
+    $('sheet').hidden = true; $('gearBtn').classList.remove('on');
+    openParty();
   });
   $('syncBtn').addEventListener('click', doSync);
   $('logMore').addEventListener('click', function () { S.logOpen = !S.logOpen; renderLog(S.data); });
